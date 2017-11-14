@@ -13,7 +13,7 @@ static char THIS_FILE[] = __FILE__;
 
 CString CstringToInt = "CString stre='abc';\r\n int intResult;\r\n intResult= atoi((const char*)stre); ";  //// CString to int Code
 CString CStringtoLong = "CString stre='abc';\r\n long longResult;\r\n longResult = _ttol((const char*)stre);";//// CString to long Code
-CString CStringfoFloat = "CString stre='1.2';\r\n float floatResult;\r\n floatResult = atof((const char*)stre);";///CString to float
+CString CStringfoFloat = "CString stre='1.2';\r\n float floatResult;\r\n floatResult = (double)atof((const char*)stre);";///CString to float
 
 /////////////////////////////////////////////////////////////////////////////
 // CTypeTransformationDlg dialog
@@ -22,6 +22,7 @@ CTypeTransformationDlg::CTypeTransformationDlg(CWnd* pParent /*=NULL*/)
 : CDialog(CTypeTransformationDlg::IDD, pParent)
 {
 	//{{AFX_DATA_INIT(CTypeTransformationDlg)
+	m_RadioButtonCString = -1;
 	//}}AFX_DATA_INIT
 	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -31,12 +32,14 @@ void CTypeTransformationDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CTypeTransformationDlg)
+	DDX_Control(pDX, IDC_COMBO_CHECKDATATYPE2, m_ComboDataTypeString);
 	DDX_Control(pDX, IDC_COMBO_CHECKDATATYPE, m_ComboDataType);
 	DDX_Control(pDX, IDC_EDIT_VIEW, m_ViewEdit);
 	DDX_Control(pDX, IDC_EDIT, m_Edit);
 	DDX_Control(pDX, IDC_BUTTON_CLEAN, m_CleanEditButton);
 	DDX_Control(pDX, IDC_BUTTON_CODE, m_CodeButton);
 	DDX_Control(pDX, IDC_BUTTON_START, m_StatButton);
+	DDX_Radio(pDX, IDC_RADIO_CString, m_RadioButtonCString);
 	//}}AFX_DATA_MAP
 }
 
@@ -47,6 +50,7 @@ ON_WM_QUERYDRAGICON()
 ON_BN_CLICKED(IDC_BUTTON_CLEAN, OnButtonClean)
 ON_BN_CLICKED(IDC_BUTTON_START, OnButtonStart)
 ON_BN_CLICKED(IDC_BUTTON_CODE, OnButtonCode)
+
 //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -68,6 +72,7 @@ BOOL CTypeTransformationDlg::OnInitDialog()
 	
 	//// set Commbo box  
 	   ((CComboBox*)GetDlgItem(IDC_COMBO_CHECKDATATYPE))->SetCurSel(0);
+	   // CheckRadioButton(IDC_RADIO_CSting,IDC_RADIO_String,IDC_RADIO_String); 
 	   
 	   return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -124,35 +129,50 @@ void CTypeTransformationDlg::OnButtonStart()
 	// TODO: Add your control notification handler code here
 	m_Edit.GetWindowText(m_EditStr); ///get edit content
 	m_ComboDataType.GetWindowText(m_DataType);///get  commbobox content
-
+	
 	
     m_IntNume = strcmp(m_DataType,"CString --->int");//// commbox conten compare
 	m_longNume = strcmp(m_DataType,"CString --->long");
 	m_FloatNume = strcmp(m_DataType,"CString --->float");
-
 	
-	if (m_EditStr!="")	///  Determine input content
+	UpdateData(TRUE); 
+	if(m_RadioButtonCString==0)   //////////////////////////////////////////////////////////////// if  RadioButton  Ones
 	{
-		if (m_IntNume ==0)
-		{	
-			CStringToInt(); //// call Function
+		
+		if (m_EditStr!="")	///  Determine input content
+		{
+			if (m_IntNume ==0)
+			{	
+				CStringToInt(); //// call Function
+				
+			}
+			else if (m_longNume ==0)///  Determine input content 
+			{
+				CStringToLong(); //// call Function
+			}
+			else if (m_FloatNume==0) ///  Determine input content 
+			{
+				CStringToFloat();/// call Function
+			}
 			
 		}
-		else if (m_longNume ==0)///  Determine input content 
+		else
 		{
-			CStringToLong(); //// call Function
+			MessageBox("The input box cannot be empty! ! !","WARING");
 		}
-		else if (m_FloatNume==0) ///  Determine input content 
-		{
-			CStringToFloat();/// call Function
-		}
+		
+	}
+	else if(m_RadioButtonCString==1)    ////////////////////////////////////////////////////////////////// if  RadioButton  two      
+	{
 		
 	}
 	else
 	{
-		MessageBox("The input box cannot be empty! ! !","WARING");
+		MessageBox("Please choose the type to convert! ! !","WARING");
 	}
 	
+	
+	UpdateData(false);
 }
 
 
@@ -194,13 +214,13 @@ void CTypeTransformationDlg::CStringToLong()
 	long long_result = _ttol((const char*)m_EditStr);////CString -->long
 	m_LongTemp.Format("%ld",long_result);///long --> CString
 	m_ViewEdit.SetWindowText(m_LongTemp);///set result view
-
+	
 }
 void CTypeTransformationDlg::CStringToFloat()
 {
-	float float_result = atof((const char*)m_EditStr);/////CString--->Float
+	float float_result = (float)atof((const char*)m_EditStr);/////CString--->Float
 	m_FloatTemp.Format("%f",float_result);/////Float ---> CString
-	m_ViewEdit.SetWindowText(m_FloatTemp);////set result view
+	m_ViewEdit.SetWindowText(m_FloatTemp);////set resulWt view
 }
 
 
@@ -210,4 +230,5 @@ void CTypeTransformationDlg::EditViewCode(CString CodeTemp)/////////ViewCoeFunti
 {
 	m_ViewEdit.SetWindowText(CodeTemp); 
 }
+
 

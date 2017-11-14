@@ -34,12 +34,14 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CTypeTransformationDlg)
 	enum { IDD = IDD_TYPETRANSFORMATION_DIALOG };
+	CComboBox	m_ComboDataTypeString;
 	CComboBox	m_ComboDataType;
 	CEdit	m_ViewEdit;
 	CEdit	m_Edit;
 	CButton	m_CleanEditButton;
 	CButton	m_CodeButton;
 	CButton	m_StatButton;
+	int		m_RadioButtonCString;
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
