@@ -14,6 +14,14 @@ class CTypeTransformationDlg : public CDialog
 {
 // Construction
 public:
+	CString m_bstrTemp;
+	void CStringToBSTR();
+	int m_BSTRNume;
+	void CStringToCharstring();
+	int m_CharstringNume;
+	void CStringToDouble();
+	int m_DoubleNume;
+	CString m_DoubleTemp;
 	int m_FloatNume;
 	CString m_FloatTemp;
 	void CStringToFloat();
@@ -34,12 +42,14 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CTypeTransformationDlg)
 	enum { IDD = IDD_TYPETRANSFORMATION_DIALOG };
+	CComboBox	m_ComboDataTypeString;
 	CComboBox	m_ComboDataType;
 	CEdit	m_ViewEdit;
 	CEdit	m_Edit;
 	CButton	m_CleanEditButton;
 	CButton	m_CodeButton;
 	CButton	m_StatButton;
+	int		m_RadioButtonCString;
 	//}}AFX_DATA
 
 	// ClassWizard generated virtual function overrides
