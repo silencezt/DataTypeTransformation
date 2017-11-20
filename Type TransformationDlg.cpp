@@ -18,10 +18,12 @@ CString CStringtoFloat = "CString stre='1.2';\r\n float floatResult;\r\n floatRe
 CString CStringtoDouble = "CString stre='1.2';\r\n double floatResult;\r\n floatResult = (double)atof((const char*)stre);";///CString to double
 CString CStringtocharstring = "CString str1 ='123'; \r\n char *t1 =str1.GetBuffer(str1.GetLength());\r\nstr1.ReleaseBuffer();";
 CString CstringtoBstr = "CString stre='abc';\r\n BSTR Bstr_result = stre.AllocSysString();\r\n SysFreeString(Bstr_result);";
-
+CString AnsitoUnicodecode="char *intostr;\r\nint nlen = MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,intostr,-1,NULL,0);\r\nwchar_t* pResult = new wchar_t[nlen];\r\nMultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,intostr,-1,pResult,nlen);\r\nwchar_t* ansituunicodeTemp = pResult;";
+CString UnicodetoAnsicode ="wchar_t* ansituunicodeTemp;\r\nint aLen =  WideCharToMultiByte(CP_ACP,0,ansituunicodeTemp,-1,NULL,0,NULL,NULL);\r\nWideCharToMultiByte(CP_ACP,0,ansituunicodeTemp,-1,aResult,aLen,NULL,NULL);\r\nchar*UnicodeToAnsiTemp = aResult;";
 
 
 /////////////////////////////////////////////////////////////////////////////
+
 // CTypeTransformationDlg dialog
 
 CTypeTransformationDlg::CTypeTransformationDlg(CWnd* pParent /*=NULL*/)
@@ -38,6 +40,7 @@ void CTypeTransformationDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	//{{AFX_DATA_MAP(CTypeTransformationDlg)
+	DDX_Control(pDX, IDC_COMBO_ANSIUNICODE, m_AnsiAndUnicodeType);
 	DDX_Control(pDX, IDC_COMBO_CHECKDATATYPE2, m_ComboDataTypeString);
 	DDX_Control(pDX, IDC_COMBO_CHECKDATATYPE, m_ComboDataType);
 	DDX_Control(pDX, IDC_EDIT_VIEW, m_ViewEdit);
@@ -78,6 +81,9 @@ BOOL CTypeTransformationDlg::OnInitDialog()
 	
 	//// set Commbo box  
 	   ((CComboBox*)GetDlgItem(IDC_COMBO_CHECKDATATYPE))->SetCurSel(0);
+	   ((CComboBox*)GetDlgItem(IDC_COMBO_ANSIUNICODE))->SetCurSel(0);
+	   
+	   
 	   // CheckRadioButton(IDC_RADIO_CSting,IDC_RADIO_String,IDC_RADIO_String); 
 	   
 	   return TRUE;  // return TRUE  unless you set the focus to a control
@@ -132,7 +138,6 @@ void CTypeTransformationDlg::OnButtonClean()
 	m_FloatTemp.Empty();
 	m_DoubleTemp.Empty();
 	m_EditStr.Empty();
-
 }
 
 void CTypeTransformationDlg::OnButtonStart() 
@@ -141,19 +146,22 @@ void CTypeTransformationDlg::OnButtonStart()
 	m_Edit.GetWindowText(m_EditStr); ///get edit content
 	m_ComboDataType.GetWindowText(m_DataType);///get  commbobox content
 	
-	
     m_IntNume = strcmp(m_DataType,"CString --->int");//// commbox conten compare
 	m_longNume = strcmp(m_DataType,"CString --->long");
 	m_FloatNume = strcmp(m_DataType,"CString --->float");
 	m_DoubleNume = strcmp(m_DataType,"CString --->double");
 	m_CharstringNume  = strcmp(m_DataType,"CString --->char*");
 	m_BSTRNume = strcmp(m_DataType,"CString --->BSTR");
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////// ANSI AND UNICODE commbox conten compare
+	m_AnsiAndUnicodeType.GetWindowText(m_AnsiAndUnidoeDataType);
+	m_AnsiToUnicodeNume = strcmp(m_AnsiAndUnidoeDataType,"ANSI--->UNICODE");
+	m_UnicodeAndAnsiNume = strcmp(m_AnsiAndUnidoeDataType,"UNICODE--->ANSI");
 
 	
 	
-	
 	UpdateData(TRUE); 
-	if(m_RadioButtonCString==0)   //////////////////////////////////////////////////////////////// if  RadioButton  Ones
+	if(m_RadioButtonCString==0)   ////////////////////////////////////////////////////////////////// if  RadioButton  Ones
 	{
 		
 		if (m_EditStr!="")	///  Determine input content
@@ -183,17 +191,36 @@ void CTypeTransformationDlg::OnButtonStart()
 			{
 				CStringToBSTR();
 			}
-			
 		}
 		else
 		{
 			MessageBox("The input box cannot be empty! ! !","WARING");
 		}
-		
 	}
-	else if(m_RadioButtonCString==1)    ////////////////////////////////////////////////////////////////// if  RadioButton  two      
+	else if(m_RadioButtonCString==1)    //////////////////////////////////////////////////////////////////// if  RadioButton  two      
 	{
 		
+	}
+	else if (m_RadioButtonCString==2)/////////////////////////////////////////////////////////////////////  if RadioButton  Three
+	{
+		if (m_EditStr!="")
+		{
+			if (m_AnsiToUnicodeNume ==0)
+			{
+				AnsiANDUnicode();
+			}
+		}
+		if (m_EditStr!="")
+		{
+			if (m_UnicodeAndAnsiNume==0)
+			{
+				AnsiANDUnicode();
+			}
+		}
+		else
+		{
+			MessageBox("The input box cannot be empty! ! !","WARING");
+		}
 	}
 	else
 	{
@@ -202,7 +229,6 @@ void CTypeTransformationDlg::OnButtonStart()
 	
 	UpdateData(false);
 }
-
 
 
 void CTypeTransformationDlg::OnButtonCode() 
@@ -243,14 +269,28 @@ void CTypeTransformationDlg::OnButtonCode()
 		}
 		
 	}
+	else if (m_RadioButtonCString==2)
+	{
+		
+		if (UnicodeToAnsiTemp!=""&&m_AnsiToUnicodeNume==0)
+		{
+			EditViewCode(AnsitoUnicodecode);
+		}
+		else if (UnicodeToAnsiTemp!=""&&m_UnicodeAndAnsiNume==0)
+		{
+			EditViewCode(UnicodetoAnsicode);
+		}
+		else
+		{
+			MessageBox("Please implement data conversion first Or Choose the right type!!!","WARNING");
+		}
+	}
 	else
 	{
 		MessageBox("Please choose the type to convert! ! !","WARING");
-		
 	}
 	
 	UpdateData(false);
-	
 }
 
 //////////////////////////////////////////////////////////////////////////////////////Data type  to Function!!!!!!
@@ -267,7 +307,6 @@ void CTypeTransformationDlg::CStringToLong()
 	long long_result = _ttol((const char*)m_EditStr);////CString -->long
 	m_LongTemp.Format("%ld",long_result);///long --> CString
 	m_ViewEdit.SetWindowText(m_LongTemp);///set result view
-	
 }
 void CTypeTransformationDlg::CStringToFloat()
 {
@@ -280,7 +319,6 @@ void CTypeTransformationDlg::CStringToDouble()
 	double double_result = (double)atof((const char*)m_EditStr);/////CString--->Double
 	m_DoubleTemp.Format("%lf",double_result);/////Double ---> CString
 	m_ViewEdit.SetWindowText(m_DoubleTemp);//////set result view
-	
 }
 
 void CTypeTransformationDlg::CStringToCharstring()
@@ -297,17 +335,34 @@ void CTypeTransformationDlg::CStringToBSTR()
     BSTR  str = (_bstr_t) Bstr_result; //////BSTR ------->CString
 	m_bstrTemp = str;
 	m_ViewEdit.SetWindowText(m_bstrTemp);    ////set result view
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////  ANSI  AND  UNICODE
+
+
+void CTypeTransformationDlg::AnsiANDUnicode()
+{
+	
+	int nlen = MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,m_EditStr,-1,NULL,0); ////////////////////////////ANSI TO UNICODE 
+	wchar_t* pResult = new wchar_t[nlen];
+    MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,m_EditStr,-1,pResult,nlen);
+	wchar_t* ansituunicodeTemp = pResult;
+	
+	int aLen =  WideCharToMultiByte(CP_ACP,0,ansituunicodeTemp,-1,NULL,0,NULL,NULL);////////////////////////UNICODE TO ANSI
+	char*aResult = new char[aLen];
+	WideCharToMultiByte(CP_ACP,0,ansituunicodeTemp,-1,aResult,aLen,NULL,NULL);
+	UnicodeToAnsiTemp = aResult;
+	
+	m_ViewEdit.SetWindowText(UnicodeToAnsiTemp);
 	
 }
 
 
 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////  
-
 void CTypeTransformationDlg::EditViewCode(CString CodeTemp)/////////ViewCoeFuntion!!!!!!
 {
 	m_ViewEdit.SetWindowText(CodeTemp); 
 }
+
 
 
