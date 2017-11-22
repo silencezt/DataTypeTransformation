@@ -14,6 +14,15 @@ class CTypeTransformationDlg : public CDialog
 {
 // Construction
 public:
+	CString m_LowerCaseTemp;
+	CString m_CapitalTemp;
+	void LowercaseToCapital();
+	void CapitalToLowercase();
+	int m_UnicodeAndAnsiNume;
+	char* UnicodeToAnsiTemp;
+	void AnsiANDUnicode();
+	int m_UnicodeToAnsiNume;
+	int m_AnsiToUnicodeNume;
 	CString m_bstrTemp;
 	void CStringToBSTR();
 	int m_BSTRNume;
@@ -33,6 +42,7 @@ public:
 	CString m_EditStr;
 	CString	m_EditView;
 	CString m_DataType;
+	CString m_AnsiAndUnidoeDataType;
 	int	m_IntNume;
 	int m_StringNume;
 	CString m_inttemp ;
@@ -42,6 +52,7 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CTypeTransformationDlg)
 	enum { IDD = IDD_TYPETRANSFORMATION_DIALOG };
+	CComboBox	m_AnsiAndUnicodeType;
 	CComboBox	m_ComboDataTypeString;
 	CComboBox	m_ComboDataType;
 	CEdit	m_ViewEdit;
