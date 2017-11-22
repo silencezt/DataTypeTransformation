@@ -26,7 +26,7 @@ Type=0
 HeaderFile=Type TransformationDlg.h
 ImplementationFile=Type TransformationDlg.cpp
 Filter=D
-LastObject=IDC_RADIO2
+LastObject=IDC_BUTTON_CLEAN
 BaseClass=CDialog
 VirtualFilter=dWC
 
@@ -35,7 +35,7 @@ VirtualFilter=dWC
 [DLG:IDD_TYPETRANSFORMATION_DIALOG]
 Type=1
 Class=CTypeTransformationDlg
-ControlCount=9
+ControlCount=13
 Control1=IDC_EDIT,edit,1350635648
 Control2=IDC_COMBO_CHECKDATATYPE,combobox,1344341251
 Control3=IDC_BUTTON_START,button,1342242816
@@ -45,4 +45,8 @@ Control6=IDC_EDIT_VIEW,edit,1350635652
 Control7=IDC_COMBO_CHECKDATATYPE2,combobox,1344340226
 Control8=IDC_RADIO_CString,button,1342308361
 Control9=IDC_RADIO_String,button,1342177289
+Control10=IDC_COMBO_ANSIUNICODE,combobox,1344340227
+Control11=IDC_ANSIANDUNICODE,button,1342177289
+Control12=IDC_RADIO_CAPITAL,button,1342177289
+Control13=IDC_RADIO_LOWERCASE,button,1342177289
 
