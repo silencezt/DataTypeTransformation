@@ -90,6 +90,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE="..\..\Program Files\Microsoft Visual Studio\VC98\MFC\SRC\APPMODUL.CPP"
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -109,6 +113,14 @@ SOURCE=".\Type TransformationDlg.cpp"
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE="..\..\Program Files\Microsoft Visual Studio\VC98\MFC\Include\AFX.INL"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\Program Files\Microsoft Visual Studio\VC98\Include\COMUTIL.H"
+# End Source File
 # Begin Source File
 
 SOURCE=.\ResultPage.h
